@@ -52,7 +52,10 @@ class NodeHttpServer {
       }
     });
 
-
+    app.all(['/api*'], (req, res, next) => {
+      res.setHeader('Access-Control-Allow-Origin', this.config.http.allow_origin);
+      next();
+    });
 
     app.use(Express.static(this.webroot));
     app.use(Express.static(this.mediaroot));
@@ -67,7 +70,7 @@ class NodeHttpServer {
 
     /**
      * ~ openssl genrsa -out privatekey.pem 1024
-     * ~ openssl req -new -key privatekey.pem -out certrequest.csr 
+     * ~ openssl req -new -key privatekey.pem -out certrequest.csr
      * ~ openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
      */
     if (this.config.https) {
